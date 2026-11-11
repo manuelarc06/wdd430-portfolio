@@ -1,4 +1,32 @@
-import ProjectsData from '@/components/ProjectsData';
+
+import { Suspense } from 'react';
+import SchoolProjectList from './SchoolProjectList';
+
+function SchoolProjectsSkeleton() {
+    return (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-pulse">
+            {[1, 2, 3, 4].map((item) => (
+                <div
+                    key={item}
+                    className="rounded-xl border border-gray-200 dark:border-gray-700 p-6 space-y-4"
+                >
+                    <div className="h-6 bg-gray-200 dark:bg-gray-700 rounded w-3/4" />
+
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full" />
+
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-5/6" />
+
+                    <div className="flex gap-2">
+                        <div className="h-6 w-20 bg-gray-200 dark:bg-gray-700 rounded-full" />
+                        <div className="h-6 w-20 bg-gray-200 dark:bg-gray-700 rounded-full" />
+                    </div>
+
+                    <div className="h-9 w-28 bg-gray-200 dark:bg-gray-700 rounded" />
+                </div>
+            ))}
+        </div>
+    );
+}
 
 export default function SchoolPage() {
     return (
@@ -7,7 +35,9 @@ export default function SchoolPage() {
                 School Projects
             </h1>
 
-            <ProjectsData endpoint="/api/projects?type=school" />
+            <Suspense fallback={<SchoolProjectsSkeleton />}>
+                <SchoolProjectList />
+            </Suspense>
         </main>
     );
 }
