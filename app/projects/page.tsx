@@ -1,9 +1,12 @@
 
 import { Suspense } from 'react';
+import { connection } from 'next/server';
 import ProjectList from '@/components/ProjectList';
 import { getProjects } from '@/lib/projects-db';
 
 async function ProjectsContent() {
+    await connection();
+
     const projects = await getProjects();
 
     return <ProjectList projects={projects} />;
