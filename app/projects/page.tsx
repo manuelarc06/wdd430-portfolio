@@ -1,15 +1,10 @@
+
 import { Suspense } from 'react';
 import ProjectList from '@/components/ProjectList';
-import { Project } from '@/lib/projects-db';
+import { getProjects } from '@/lib/projects-db';
 
 async function ProjectsContent() {
-    const response = await fetch('http://localhost:3000/api/projects');
-
-    if (!response.ok) {
-        throw new Error('Error al obtener los proyectos');
-    }
-
-    const projects: Project[] = await response.json();
+    const projects = await getProjects();
 
     return <ProjectList projects={projects} />;
 }

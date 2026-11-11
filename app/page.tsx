@@ -1,25 +1,13 @@
-import ProjectList from "@/components/ProjectList";
 
-const projects = [
-  {
-    id: 1,
-    title: "My First Next.js App",
-    description:
-      "My first portfolio application built with Next.js as part of my WDD 430 course.",
-    type: "school" as const,
-    technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS"],
-    link: "https://github.com/manuelarc06/wdd430-portfolio"
-  },
-  {
-    id: 2,
-    title: "Manga & Manhwa Explorer",
-    description:
-      "A web application where users can explore popular manga and manhwa, discover titles by genre, search for their favorite series, view detailed information, and save favorite titles to their personal library. The application uses APIs to retrieve manga information.",
-    type: "opensource" as const,
-    technologies: ["JavaScript", "React", "HTML", "CSS", "REST APIs"],
-    link: "https://manga-manhwa-explorer.onrender.com"
-  }
-];
+import { Suspense } from "react";
+import ProjectList from "@/components/ProjectList";
+import { getProjects } from "@/lib/projects-db";
+
+async function ProjectsContent() {
+  const projects = await getProjects();
+
+  return <ProjectList projects={projects} />;
+}
 
 export default function Home() {
   return (
@@ -41,7 +29,9 @@ export default function Home() {
           My Projects
         </h2>
 
-        <ProjectList projects={projects} />
+        <Suspense fallback={<p>Loading projects...</p>}>
+          <ProjectsContent />
+        </Suspense>
       </section>
     </main>
   );
