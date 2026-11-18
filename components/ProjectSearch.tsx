@@ -14,27 +14,21 @@ export default function ProjectSearch() {
     const router = useRouter();
 
     const currentQuery = searchParams.get('query') ?? '';
+    const searchParamsString = searchParams.toString();
 
     const [searchTerm, setSearchTerm] = useState(currentQuery);
-
-    // Keep the input synchronized with browser navigation
-    useEffect(() => {
-        setSearchTerm(currentQuery);
-    }, [currentQuery]);
 
     // Debounce search and update the URL
     useEffect(() => {
         const timeout = setTimeout(() => {
-            const params = new URLSearchParams(
-                searchParams.toString()
-            );
-
             const normalizedQuery = searchTerm.trim();
 
             // Avoid unnecessary navigation
-            if (params.get('query') === normalizedQuery) {
+            if (currentQuery === normalizedQuery) {
                 return;
             }
+
+            const params = new URLSearchParams(searchParamsString);
 
             if (normalizedQuery) {
                 params.set('query', normalizedQuery);
@@ -55,7 +49,17 @@ export default function ProjectSearch() {
         }, 400);
 
         return () => clearTimeout(timeout);
-    }, [searchTerm, pathname, router, searchParams]);
+    }, [
+        searchTerm,
+        currentQuery,
+        pathname,
+        router,
+        searchParamsString,
+    ]);
+
+    // Synchronize the input when browser navigation changes the URL
+    const displayedValue =
+        searchTerm === currentQuery ? searchTerm : currentQuery;
 
     return (
         <div className="mb-8">
@@ -71,7 +75,7 @@ export default function ProjectSearch() {
                     id="project-search"
                     type="search"
                     placeholder="Search by title, description, or technology..."
-                    value={searchTerm}
+                    value={displayedValue}
                     onChange={(event) =>
                         setSearchTerm(event.target.value)
                     }

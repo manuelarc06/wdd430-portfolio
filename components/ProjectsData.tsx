@@ -1,16 +1,9 @@
+
 'use client';
 
 import { useEffect, useState } from 'react';
 import ProjectList from './ProjectList';
-
-interface Project {
-    id: number;
-    title: string;
-    description: string;
-    type: 'opensource' | 'school';
-    technologies: string[];
-    link?: string;
-}
+import type { Project } from '@/lib/projects-db';
 
 export default function ProjectsData({
     endpoint,

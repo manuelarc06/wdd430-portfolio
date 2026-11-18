@@ -1,6 +1,7 @@
 
 import { Suspense } from 'react';
 import { connection } from 'next/server';
+import Link from 'next/link';
 
 import ProjectList from '@/components/ProjectList';
 import ProjectSearch from '@/components/ProjectSearch';
@@ -72,6 +73,16 @@ export default function ProjectsPage({
             <h1 className="text-4xl font-bold mb-6">
                 Projects Overview
             </h1>
+
+            {/* Create Project Button */}
+            <div className="mb-6">
+                <Link
+                    href="/projects/create"
+                    className="inline-block bg-blue-600 hover:bg-blue-700 text-white font-semibold px-5 py-3 rounded-lg transition-colors"
+                >
+                    + Create New Project
+                </Link>
+            </div>
 
             <Suspense fallback={<p>Loading projects...</p>}>
                 <ProjectsContent searchParams={searchParams} />
