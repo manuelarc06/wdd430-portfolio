@@ -14,6 +14,14 @@ import {
     sanitizePage,
 } from '@/lib/projects-db';
 
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: "Projects",
+    description:
+        "Explore Manuela Rodriguez's web development portfolio, including school projects and open source contributions.",
+};
+
 interface ProjectsPageProps {
     searchParams: Promise<{
         query?: string;

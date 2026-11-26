@@ -1,9 +1,19 @@
+
+import type { Metadata } from "next";
 import SkillCard from "@/components/SkillCard";
+
+export const metadata: Metadata = {
+    title: "About",
+    description:
+        "Learn more about Manuela Rodriguez, a web development student learning React, Next.js, TypeScript, JavaScript, and Tailwind CSS.",
+};
 
 export default function About() {
     return (
         <main className="max-w-4xl mx-auto px-4 py-12">
-            <h1 className="text-3xl font-bold mb-6 text-gray-900">About Me</h1>
+            <h1 className="text-3xl font-bold mb-6 text-gray-900">
+                About Me
+            </h1>
 
             <p className="text-lg text-gray-700 mb-6">
                 Hello! I am a web development student

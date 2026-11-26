@@ -5,8 +5,41 @@ import { sql } from '@vercel/postgres';
 import { revalidatePath } from 'next/cache';
 import { redirect } from 'next/navigation';
 import { z } from 'zod';
+import { auth, signIn } from '@/auth';
+import { AuthError } from 'next-auth';
 
 const currentYear = new Date().getFullYear();
+
+// Verify that the user is authenticated
+async function requireOwnerSession() {
+    const session = await auth();
+
+    if (!session?.user) {
+        throw new Error('Not authenticated');
+    }
+
+    return session;
+}
+
+// Login action
+export async function authenticate(
+    prevState: string | undefined,
+    formData: FormData,
+): Promise<string | undefined> {
+    try {
+        await signIn('credentials', formData);
+    } catch (error) {
+        if (error instanceof AuthError) {
+            if (error.type === 'CredentialsSignin') {
+                return 'Invalid email or password.';
+            }
+
+            return 'Something went wrong.';
+        }
+
+        throw error;
+    }
+}
 
 const ProjectFormSchema = z.object({
     title: z.string().trim().min(2, 'Title is required'),
@@ -58,10 +91,13 @@ export type State = {
     message?: string | null;
 };
 
+// CREATE PROJECT
 export async function createProject(
     prevState: State,
     formData: FormData
 ): Promise<State> {
+
+    await requireOwnerSession();
 
     const parsed = ProjectFormSchema.safeParse({
         title: formData.get('title'),
@@ -120,6 +156,8 @@ export async function updateProject(
     id: number,
     formData: FormData
 ) {
+    await requireOwnerSession();
+
     if (!Number.isSafeInteger(id) || id <= 0) {
         throw new Error('Invalid project ID.');
     }
@@ -168,6 +206,8 @@ export async function updateProject(
 
 // DELETE PROJECT
 export async function deleteProject(formData: FormData) {
+    await requireOwnerSession();
+
     const rawId = formData.get('id');
 
     if (

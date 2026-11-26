@@ -2,6 +2,14 @@
 import { Suspense } from 'react';
 import SchoolProjectList from './SchoolProjectList';
 
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+    title: "School Projects",
+    description:
+        "Explore school projects by Manuela Rodriguez, showcasing web development skills and technologies learned.",
+};
+
 function SchoolProjectsSkeleton() {
     return (
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 animate-pulse">
